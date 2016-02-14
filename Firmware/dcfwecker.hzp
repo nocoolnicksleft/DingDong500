@@ -1,0 +1,48 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="dcfwecker" version="1">
+  <project Name="dcfwecker">
+    <configuration Name="Common" Target="LPC2294" batch_build_configurations="ARM Flash Release" link_include_startup_code="No" linker_memory_map_file="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC2294_MemoryMap.xml" project_directory="" project_type="Executable" property_groups_file_path="$(StudioDir)/targets/Philips_LPC210X/propertyGroups.xml"/>
+    <configuration Name="RAM" target_reset_script="SRAMReset()"/>
+    <configuration Name="Flash" arm_target_flash_loader_file_path="$(StudioDir)/targets/Philips_LPC210X/Release/Loader.exe" target_reset_script="FLASHReset()"/>
+    <folder Name="Source Files">
+      <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc"/>
+      <file Name="main.c" file_name="main.c">
+        <configuration Name="ARM Flash Debug" arm_long_calls="Yes"/>
+        <configuration Name="ARM Flash Release" build_remove_unused_symbols="Yes"/>
+      </file>
+      <file Name="vfd.c" file_name="vfd.c"/>
+      <file Name="rtc.c" file_name="rtc.c"/>
+      <file Name="rtc.h" file_name="rtc.h"/>
+    </folder>
+    <folder Name="System Files">
+      <file Name="crt0.s" file_name="$(StudioDir)/source/crt0.s"/>
+      <file Name="Philips_LPC210X_Startup.s" file_name="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC210X_Startup.s"/>
+      <file Name="sram_placement.xml" file_name="$(StudioDir)/targets/sram_placement.xml">
+        <configuration Name="Flash" build_exclude_from_build="Yes"/>
+      </file>
+      <file Name="flash_placement.xml" file_name="$(StudioDir)/targets/flash_placement.xml">
+        <configuration Name="RAM" build_exclude_from_build="Yes"/>
+      </file>
+      <file Name="Philips_LPC210X_Target.js" file_name="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC210X_Target.js">
+        <configuration Name="Common" file_type="Reset Script"/>
+      </file>
+    </folder>
+    <configuration Name="" arm_target_loader_parameter="14745500" arm_target_loader_reset_after_download="Yes" arm_target_stop_cpu_using_dbgrq="Yes" target_go_script=""/>
+    <configuration Name="ARM Flash Debug" Target="LPC2114" arm_library_instruction_set="ARM" arm_long_calls="Yes" arm_target_loader_parameter="12000000" c_preprocessor_definitions="VECTORED_IRQ_INTERRUPTS;STARTUP_FROM_RESET" linker_memory_map_file="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC2114_MemoryMap.xml" oscillator_frequency="12MHz"/>
+    <configuration Name="ARM Flash Release" Target="LPC2114" arm_long_calls="Yes" arm_target_loader_parameter="14745500" arm_target_stop_cpu_using_dbgrq="No" build_debug_information="No" build_remove_unused_symbols="Yes" gcc_optimization_level="None" linker_memory_map_file="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC2114_MemoryMap.xml"/>
+  </project>
+  <configuration Name="ARM RAM Debug" inherited_configurations="ARM;RAM;Debug"/>
+  <configuration Name="ARM" arm_instruction_set="ARM" arm_library_instruction_set="ARM" c_preprocessor_definitions="__ARM" hidden="Yes"/>
+  <configuration Name="RAM" c_preprocessor_definitions="__RAM_BUILD" hidden="Yes"/>
+  <configuration Name="Debug" build_debug_information="Yes" c_preprocessor_definitions="DEBUG" gcc_optimization_level="None" link_include_startup_code="No"/>
+  <configuration Name="ARM RAM Release" inherited_configurations="ARM;RAM;Release"/>
+  <configuration Name="Release" build_debug_information="No" c_preprocessor_definitions="NDEBUG" gcc_optimization_level="Level 1" link_include_startup_code="No"/>
+  <configuration Name="THUMB RAM Debug" inherited_configurations="THUMB;RAM;Debug"/>
+  <configuration Name="THUMB" arm_instruction_set="THUMB" arm_library_instruction_set="THUMB" c_preprocessor_definitions="__THUMB" hidden="Yes"/>
+  <configuration Name="THUMB RAM Release" inherited_configurations="THUMB;RAM;Release"/>
+  <configuration Name="ARM Flash Debug" inherited_configurations="ARM;Flash;Debug"/>
+  <configuration Name="Flash" c_preprocessor_definitions="__FLASH_BUILD" hidden="Yes"/>
+  <configuration Name="ARM Flash Release" inherited_configurations="ARM;Flash;Release"/>
+  <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>
+  <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
+</solution>

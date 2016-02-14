@@ -1,0 +1,120 @@
+<!DOCTYPE CrossStudio_for_ARM_Session_File>
+<session>
+ <Autos>
+  <Watches active="0" />
+ </Autos>
+ <Bookmarks>
+  <BookmarkItem column="-1" line="121" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="1" name="Unnamed 1" />
+  <BookmarkItem column="-1" line="408" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="2" name="Unnamed 2" />
+  <BookmarkItem column="-1" line="424" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="3" name="Unnamed 3" />
+  <BookmarkItem column="-1" line="618" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="4" name="Unnamed 4" />
+  <BookmarkItem column="-1" line="624" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="5" name="Unnamed 5" />
+  <BookmarkItem column="-1" line="630" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="6" name="Unnamed 6" />
+  <BookmarkItem column="-1" line="724" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="7" name="Unnamed 7" />
+  <BookmarkItem column="-1" line="725" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="8" name="Unnamed 8" />
+  <BookmarkItem column="-1" line="726" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="9" name="Unnamed 9" />
+  <BookmarkItem column="-1" line="727" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="10" name="Unnamed 10" />
+  <BookmarkItem column="-1" line="733" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="11" name="Unnamed 11" />
+  <BookmarkItem column="-1" line="734" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="12" name="Unnamed 12" />
+  <BookmarkItem column="-1" line="735" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="13" name="Unnamed 13" />
+  <BookmarkItem column="-1" line="736" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="14" name="Unnamed 14" />
+  <BookmarkItem column="-1" line="743" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="15" name="Unnamed 15" />
+  <BookmarkItem column="-1" line="744" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="16" name="Unnamed 16" />
+  <BookmarkItem column="-1" line="745" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="17" name="Unnamed 17" />
+  <BookmarkItem column="-1" line="766" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="18" name="Unnamed 18" />
+  <BookmarkItem column="-1" line="768" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="19" name="Unnamed 19" />
+  <BookmarkItem column="-1" line="769" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="20" name="Unnamed 20" />
+  <BookmarkItem column="-1" line="779" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="21" name="Unnamed 21" />
+  <BookmarkItem column="-1" line="793" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="22" name="Unnamed 22" />
+  <BookmarkItem column="-1" line="796" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="23" name="Unnamed 23" />
+  <BookmarkItem column="-1" line="799" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="24" name="Unnamed 24" />
+  <BookmarkItem column="-1" line="809" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" number="25" name="Unnamed 25" />
+ </Bookmarks>
+ <Breakpoints>
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="D_Abort" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="FIQ" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="IRQ" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="P_Abort" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="Reset" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="SWI" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="Undef" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="BusFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="ExceptionEntryReturnFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="HardFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="MemManage" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="Reset" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_CheckingError" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_Coprocessor" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_StateError" filename="" />
+ </Breakpoints>
+ <ExecutionCountWindow/>
+ <Memory1>
+  <MemoryWindow autoEvaluate="0" addressText="0x40000048" numColumns="8" sizeText="6" dataSize="1" radix="16" addressSpace="" />
+ </Memory1>
+ <Memory2>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory2>
+ <Memory3>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory3>
+ <Memory4>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory4>
+ <MemoryUsageWindow>
+  <ProjectSessionItem path="dcfwecker" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker;Source Files" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker;System Files" name="unnamed" />
+ </MemoryUsageWindow>
+ <Project>
+  <ProjectSessionItem path="dcfwecker" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker;Source Files" name="unnamed" />
+  <ProjectSessionItem path="dcfwecker;dcfwecker;System Files" name="unnamed" />
+ </Project>
+ <Register1>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register1>
+ <Register2>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register2>
+ <Register3>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register3>
+ <Register4>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register4>
+ <SourceNavigatorWindow/>
+ <TraceWindow>
+  <Trace wrap="Yes" type="1" enabled="Yes" />
+ </TraceWindow>
+ <Watch1>
+  <Watches active="1" >
+   <Watchpoint evalMode="2" linenumber="525" numelements="6" evalType="0" radix="1" name="timebuffer" expression="timebuffer" filename="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" />
+   <Watchpoint evalMode="2" linenumber="1161" numelements="15" evalType="0" radix="1" name="Days" expression="Days" filename="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" />
+   <Watchpoint linenumber="1039" radix="-1" name="cfg_alarmstate" expression="cfg_alarmstate" filename="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" />
+  </Watches>
+ </Watch1>
+ <Watch2>
+  <Watches active="0" />
+ </Watch2>
+ <Watch3>
+  <Watches active="0" />
+ </Watch3>
+ <Watch4>
+  <Watches active="0" />
+ </Watch4>
+ <Files>
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" y="1082" path="C:\LokaleDaten\ARMprojects\dcfwecker\main.c" left="0" selected="0" name="unnamed" top="1043" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\vfd.c" y="34" path="C:\LokaleDaten\ARMprojects\dcfwecker\vfd.c" left="0" selected="0" name="unnamed" top="28" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="24" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\vfd.h" y="38" path="C:\LokaleDaten\ARMprojects\dcfwecker\vfd.h" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\radio.c" y="373" path="C:\LokaleDaten\ARMprojects\dcfwecker\radio.c" left="0" selected="0" name="unnamed" top="359" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="5" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\dcf.c" y="189" path="C:\LokaleDaten\ARMprojects\dcfwecker\dcf.c" left="0" selected="0" name="unnamed" top="141" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="63" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\spi.c" y="98" path="C:\LokaleDaten\ARMprojects\dcfwecker\spi.c" left="0" selected="0" name="unnamed" top="91" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="26" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\rtc.c" y="147" path="C:\LokaleDaten\ARMprojects\dcfwecker\rtc.c" left="0" selected="0" name="unnamed" top="111" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="21" debugPath="C:\Programme\Rowley Associates Limited\CrossWorks for ARM 1.7\targets\Philips_LPC210X\Philips_LPC210X_Startup.s" y="19" path="C:\Programme\Rowley Associates Limited\CrossWorks for ARM 1.7\targets\Philips_LPC210X\Philips_LPC210X_Startup.s" left="0" selected="0" name="unnamed" top="12" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\common.h" y="0" path="C:\LokaleDaten\ARMprojects\dcfwecker\common.h" left="0" selected="0" name="unnamed" top="45" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="24" debugPath="C:\LokaleDaten\ARMprojects\dcfwecker\rtc.h" y="39" path="C:\LokaleDaten\ARMprojects\dcfwecker\rtc.h" left="0" selected="1" name="unnamed" top="0" />
+ </Files>
+ <ARMCrossStudioWindow activeProject="dcfwecker" autoConnectTarget="/USB CrossConnect for ARM" debugSearchFileMap="" fileDialogInitialDirectory="C:\LokaleDaten\ARMprojects\dcfwecker" fileDialogDefaultFilter="*.cpp;*.cxx;*.cc;*.c;*.h;*.hpp;*.hxx" autoConnectCapabilities="1407" debugSearchPath="" buildConfiguration="ARM Flash Debug" />
+</session>
