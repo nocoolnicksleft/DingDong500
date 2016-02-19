@@ -1,0 +1,90 @@
+<!DOCTYPE CrossStudio_for_ARM_Session_File>
+<session>
+ <Autos>
+  <Watches active="0" />
+ </Autos>
+ <Bookmarks/>
+ <Breakpoints/>
+ <ExecutionCountWindow/>
+ <Memory1>
+  <MemoryWindow autoEvaluate="1" addressText="IO0PIN" numColumns="8" sizeText="4" dataSize="2" radix="2" addressSpace="" />
+ </Memory1>
+ <Memory2>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory2>
+ <Memory3>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory3>
+ <Memory4>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory4>
+ <MemoryUsageWindow>
+  <ProjectSessionItem path="Firmware501" name="unnamed" />
+ </MemoryUsageWindow>
+ <Project>
+  <ProjectSessionItem path="Firmware501" name="unnamed" />
+ </Project>
+ <Register1>
+  <RegisterWindow openNodes="CPU - Current Mode;CPU - Current Mode/cpsr" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register1>
+ <Register2>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register2>
+ <Register3>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register3>
+ <Register4>
+  <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="" decimalNodes="" octalNodes="" asciiNodes="" />
+ </Register4>
+ <SourceNavigatorWindow/>
+ <TraceWindow>
+  <Trace wrap="Yes" type="1" enabled="Yes" />
+ </TraceWindow>
+ <Watch1>
+  <Watches active="1" />
+ </Watch1>
+ <Watch2>
+  <Watches active="0" />
+ </Watch2>
+ <Watch3>
+  <Watches active="0" />
+ </Watch3>
+ <Watch4>
+  <Watches active="0" />
+ </Watch4>
+ <Files/>
+ <ARMCrossStudioWindow activeProject="Firmware501" autoConnectTarget="/USB CrossConnect for ARM-RTCK" debugSearchFileMap="..\libmad-0.15.1b\minimad.c
+
+\cygdrive\c\Keil\ARM\GNU\Boards\Keil\MCB2130\libmad-0.15.1b\bit.c
+C:\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\bit.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\bit.c
+C:\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\bit.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\crt0.S
+
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\decoder.c
+\decoder.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\fixed.c
+\fixed.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\frame.c
+\frame.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\imdct_l_arm.S
+\imdct_l_arm.S
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\layer12.c
+\layer12.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\layer3.c
+\layer3.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\lpc_io.c
+C:\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\lpc_io.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\minimad.c
+C:\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\minimad.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\Philips_LPC210X_Startup.s
+
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\stream.c
+\stream.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\synth.c
+\synth.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\timer.c
+\timer.c
+\cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\MP3Player\ARM Flash Debug\Startup.s
+\Startup.s" fileDialogInitialDirectory="C:\LokaleDaten\ARMprojects\NixieClock_Armed_01" fileDialogDefaultFilter="*" autoConnectCapabilities="1407" debugSearchPath="" buildConfiguration="ARM Flash Debug" />
+</session>

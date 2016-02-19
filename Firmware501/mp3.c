@@ -1,5 +1,5 @@
-#include <targets/LPC210x.h>
-#include "common.h"
+
+#include "main.h"
 #include "mp3.h"
 #include "vfd.h"
 #include "rtc.h"
@@ -165,7 +165,7 @@ void mp3clearqueue()
 }
 
 
-void mp3commandpush(charXX c)
+void mp3commandpush(char c)
 {
 #ifdef DEBUG_MAIN
  //debug_printf("push %c qlen: %u qstart: %u qstop: %u \r\n",c,get_queue_length(),mp3command_queue_start,mp3command_queue_stop);

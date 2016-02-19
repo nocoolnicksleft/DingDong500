@@ -1,0 +1,41 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="Firmware501" version="1">
+  <project Name="Firmware501">
+    <configuration Name="Common" Target="LPC2141" arm_architecture="v4T" arm_core_type="ARM7TDMI-S" arm_gcc_target="arm-unknown-eabi" arm_simulator_memory_simulation_filename="$(StudioDir)/targets/Philips_LPC210X/LPC2000SimulatorMemory.dll" arm_simulator_memory_simulation_parameter="LPC21;0x8000;0x2000" arm_target_debug_interface_type="ARM7TDI" arm_target_loader_parameter="12000000" gcc_entry_point="reset_handler" link_include_startup_code="No" linker_additional_files="$(StudioDir)/lib/liblpc2000$(LibExt)$(LIB)" linker_memory_map_file="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC2141_MemoryMap.xml" oscillator_frequency="12MHz" project_directory="" project_type="Executable" property_groups_file_path="$(StudioDir)/targets/Philips_LPC210X/propertyGroups21xx.xml"/>
+    <configuration Name="RAM" Placement="RAM" linker_section_placement_file="$(StudioDir)/targets/sram_placement.xml" target_reset_script="SRAMReset()"/>
+    <configuration Name="Flash" Placement="Flash" arm_target_flash_loader_file_path="$(StudioDir)/targets/Philips_LPC210X/Release/Loader_rpc.elf" arm_target_flash_loader_type="LIBMEM RPC Loader" linker_section_placement_file="$(StudioDir)/targets/flash_placement.xml" target_reset_script="FLASHReset()"/>
+    <folder Name="Source Files">
+      <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc"/>
+      <file Name="main.cpp" file_name="main.cpp"/>
+      <file Name="dcf.c" file_name="dcf.c"/>
+      <file Name="mp3.c" file_name="mp3.c"/>
+      <file Name="radio.c" file_name="radio.c">
+        <configuration Name="ARM Flash Debug" build_exclude_from_build="Yes"/>
+      </file>
+      <file Name="rtc.c" file_name="rtc.c"/>
+      <file Name="spi.c" file_name="spi.c">
+        <configuration Name="ARM Flash Debug" build_exclude_from_build="Yes"/>
+      </file>
+      <file Name="vfd.c" file_name="vfd.c"/>
+    </folder>
+    <folder Name="System Files">
+      <file Name="crt0.s" file_name="$(StudioDir)/source/crt0.s"/>
+      <file Name="Philips_LPC210X_Startup.s" file_name="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC210X_Startup.s"/>
+      <file Name="LPC210x.c" file_name="$(StudioDir)/targets/Philips_LPC210X/LPC210x.c"/>
+      <file Name="Philips_LPC210X_Target.js" file_name="$(StudioDir)/targets/Philips_LPC210X/Philips_LPC210X_Target.js">
+        <configuration Name="Common" file_type="Reset Script"/>
+      </file>
+      <file Name="VIC.c" file_name="$(StudioDir)/targets/Philips_LPC210X/VIC.c"/>
+      <file Name="VIC_irq_handler.s" file_name="$(StudioDir)/targets/Philips_LPC210X/VIC_irq_handler.s"/>
+    </folder>
+  </project>
+  <configuration Name="ARM RAM Debug" inherited_configurations="ARM;RAM;Debug"/>
+  <configuration Name="ARM" arm_instruction_set="ARM" arm_library_instruction_set="ARM" c_preprocessor_definitions="__ARM" hidden="Yes"/>
+  <configuration Name="RAM" c_preprocessor_definitions="__RAM_BUILD" hidden="Yes"/>
+  <configuration Name="Debug" build_debug_information="Yes" c_preprocessor_definitions="DEBUG" gcc_optimization_level="None" hidden="Yes" link_include_startup_code="No"/>
+  <configuration Name="ARM RAM Release" inherited_configurations="ARM;RAM;Release"/>
+  <configuration Name="Release" build_debug_information="No" c_preprocessor_definitions="NDEBUG" gcc_optimization_level="Level 1" hidden="Yes" link_include_startup_code="No"/>
+  <configuration Name="ARM Flash Debug" inherited_configurations="ARM;Flash;Debug"/>
+  <configuration Name="Flash" c_preprocessor_definitions="__FLASH_BUILD" hidden="Yes"/>
+  <configuration Name="ARM Flash Release" inherited_configurations="ARM;Flash;Release"/>
+</solution>
