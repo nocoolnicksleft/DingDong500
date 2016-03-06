@@ -6,17 +6,31 @@
     <configuration Name="Flash" Placement="Flash" arm_target_flash_loader_file_path="$(StudioDir)/targets/Philips_LPC210X/Release/Loader_rpc.elf" arm_target_flash_loader_type="LIBMEM RPC Loader" linker_section_placement_file="$(StudioDir)/targets/flash_placement.xml" target_reset_script="FLASHReset()"/>
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc"/>
-      <file Name="main.cpp" file_name="main.cpp"/>
-      <file Name="dcf.c" file_name="dcf.c"/>
+      <file Name="dcf.c" file_name="dcf.c">
+        <configuration Name="ARM Flash Debug" c_preprocessor_definitions=""/>
+      </file>
       <file Name="mp3.c" file_name="mp3.c"/>
       <file Name="radio.c" file_name="radio.c">
         <configuration Name="ARM Flash Debug" build_exclude_from_build="Yes"/>
+        <configuration Name="ARM RAM Debug" build_exclude_from_build="Yes"/>
+        <configuration Name="ARM Flash Release" build_exclude_from_build="Yes"/>
       </file>
-      <file Name="rtc.c" file_name="rtc.c"/>
-      <file Name="spi.c" file_name="spi.c">
+      <file Name="rtc.c" file_name="rtc.c">
+        <configuration Name="ARM Flash Release" build_exclude_from_build="Yes"/>
         <configuration Name="ARM Flash Debug" build_exclude_from_build="Yes"/>
       </file>
+      <file Name="spi.c" file_name="spi.c">
+        <configuration Name="ARM Flash Debug" build_exclude_from_build="Yes"/>
+        <configuration Name="ARM RAM Debug" build_exclude_from_build="Yes"/>
+        <configuration Name="ARM Flash Release" build_exclude_from_build="Yes"/>
+      </file>
       <file Name="vfd.c" file_name="vfd.c"/>
+      <file Name="keyboard.cpp" file_name="keyboard.cpp"/>
+      <file Name="ds3231.cpp" file_name="ds3231.cpp"/>
+      <file Name="i2c_slave.cpp" file_name="i2c_slave.cpp"/>
+      <file Name="main.c" file_name="main.c">
+        <configuration Name="ARM Flash Release" gcc_optimization_level="Optimize For Size"/>
+      </file>
     </folder>
     <folder Name="System Files">
       <file Name="crt0.s" file_name="$(StudioDir)/source/crt0.s"/>
@@ -28,14 +42,17 @@
       <file Name="VIC.c" file_name="$(StudioDir)/targets/Philips_LPC210X/VIC.c"/>
       <file Name="VIC_irq_handler.s" file_name="$(StudioDir)/targets/Philips_LPC210X/VIC_irq_handler.s"/>
     </folder>
+    <configuration Name="ARM RAM Debug" c_preprocessor_definitions="STARTUP_FROM_RESET"/>
+    <configuration Name="ARM Flash Release" arm_keep_assembly="Yes" c_preprocessor_definitions="VECTORED_IRQ_INTERRUPTS" gcc_optimization_level="Level 1"/>
+    <configuration Name="ARM Flash Debug" arm_interwork="No" arm_keep_assembly="Yes" arm_linker_abt_stack_size="16" arm_linker_svc_stack_size="16" arm_linker_und_stack_size="16" c_preprocessor_definitions="VECTORED_IRQ_INTERRUPTS"/>
   </project>
-  <configuration Name="ARM RAM Debug" inherited_configurations="ARM;RAM;Debug"/>
+  <configuration Name="ARM RAM Debug" c_preprocessor_definitions="" inherited_configurations="ARM;RAM;Debug"/>
   <configuration Name="ARM" arm_instruction_set="ARM" arm_library_instruction_set="ARM" c_preprocessor_definitions="__ARM" hidden="Yes"/>
   <configuration Name="RAM" c_preprocessor_definitions="__RAM_BUILD" hidden="Yes"/>
   <configuration Name="Debug" build_debug_information="Yes" c_preprocessor_definitions="DEBUG" gcc_optimization_level="None" hidden="Yes" link_include_startup_code="No"/>
   <configuration Name="ARM RAM Release" inherited_configurations="ARM;RAM;Release"/>
   <configuration Name="Release" build_debug_information="No" c_preprocessor_definitions="NDEBUG" gcc_optimization_level="Level 1" hidden="Yes" link_include_startup_code="No"/>
-  <configuration Name="ARM Flash Debug" inherited_configurations="ARM;Flash;Debug"/>
+  <configuration Name="ARM Flash Debug" c_preprocessor_definitions="" inherited_configurations="ARM;Flash;Debug"/>
   <configuration Name="Flash" c_preprocessor_definitions="__FLASH_BUILD" hidden="Yes"/>
   <configuration Name="ARM Flash Release" inherited_configurations="ARM;Flash;Release"/>
 </solution>

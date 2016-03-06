@@ -13,40 +13,37 @@ volatile unsigned short int dcfvalid = 0;
 volatile unsigned short int dcfreceived = 0;
 volatile unsigned short int dcfsync = 0;
 
-struct dcftimestamp {
- unsigned int min;
- unsigned int hour;
- unsigned int wday;
- unsigned int day;
- unsigned int month;
- unsigned int year;
- unsigned int utcoffset;
- unsigned int alert;
- unsigned int offsetchange;
- unsigned int leapsecond;
-} dcf1, dcf2;
+
+struct dcftimestamp dcf1;
+struct dcftimestamp dcf2;
 
 
 /*********************************************************************/
 /* INTERRUPT DCF DOWN (IRQ)                                          */
 /*********************************************************************/
-
-static void dcfdownISR(void)
+void dcfdownISR(void)
 {
  
-  IOCLR = BIT_29;
+  
   dcfsignal = 0;
   dcfvalid = 0;
+#ifdef DEBUG_MAIN 
+  //debug_printf("d %u\n",dcfdeltatimer);
+#endif
+
 
   if ((dcfdeltatimer > 12) && (dcfdeltatimer<24)) {
    if (!dcfdecodenow) {
      dcfbuffer[(dcfbitcount / 8)] |= (1 << (dcfbitcount % 8)); // short for div/mod by 8
    }
-   //debug_printf("1!\n");
+#ifdef DEBUG_MAIN 
+//   debug_printf("1!\n");
+#endif
  }
 
+
   /* Clear the external interrupt */
-  EXTINT = 0x00000001;
+  EXTINT = EXTINT_EINT0;
   /* Dummy write VIC Vector Address to signal end of interrupt handling */
   VICVectAddr = 0;
 }
@@ -56,16 +53,14 @@ static void dcfdownISR(void)
 /* INTERRUPT DCF UP (IRQ)                                            */
 /*********************************************************************/
 
-static void dcfupISR(void)
+void dcfupISR(void)
 {
- // debug_printf("u %u ",dcfdeltatimer);
   
-  IOSET = BIT_29;
   dcfsignal = 1;
 
-  if ( ((dcfdeltatimer > 95) && (dcfdeltatimer < 105))  || 
-       ((dcfdeltatimer > 195) && (dcfdeltatimer < 205)) ) {
-   if (dcfdeltatimer > 195) {
+  if ( ((dcfdeltatimer > 70) && (dcfdeltatimer < 130))  || 
+       ((dcfdeltatimer > 160) && (dcfdeltatimer < 250)) ) {
+   if (dcfdeltatimer > 220) {
     dcfdecodenow = 1;
    } 
    dcfvalid = 1;
@@ -73,14 +68,15 @@ static void dcfupISR(void)
 
    if (dcfbitcount > 58) dcfbitcount = 0;
    else dcfbitcount++;
-  // debug_printf("b %u\n",dcfbitcount);
    
   } 
-  
-  // debug_printf("xbit: %u timer: %u\n",dcfbitcount,dcfdeltatimer);
 
-/* Clear the external interrupt */
-  EXTINT = 0x00000002;
+#ifdef DEBUG_MAIN 
+   debug_printf("xbit: %u\n",dcfbitcount);
+#endif
+
+  /* Clear the external interrupt */
+  EXTINT = EXTINT_EINT1;
   /* Dummy write VIC Vector Address to signal end of interrupt handling */
   VICVectAddr = 0;
  
@@ -112,7 +108,7 @@ int do_dcf_decode(struct dcftimestamp* dcf)
    dcf->day = bcddecode( (dcfbuffer[5] & 0x3 ) << 4 | ((dcfbuffer[4] & 0xF0 ) >> 4));
    dcf->wday = bcddecode( (dcfbuffer[5] & 0x1C ) >>2 );
    dcf->month = bcddecode( ((dcfbuffer[6] & 0x3 ) << 3) | ((dcfbuffer[5] &  0xE0) >> 5) );
-   dcf->year = bcddecode( (dcfbuffer[7] & 0x3 ) << 7 | ((dcfbuffer[6] & 0x3F) >> 2));
+   dcf->year = bcddecode( (dcfbuffer[7] & 0x3 ) << 6 | ((dcfbuffer[6] & 0xFC) >> 2));
    dcf->alert = (dcfbuffer[1] & 0x80)  >> 7;
    dcf->offsetchange = (dcfbuffer[2] & 0x1) ;
    dcf->leapsecond = (dcfbuffer[2] & 0x8) >> 3;
@@ -123,7 +119,7 @@ int do_dcf_decode(struct dcftimestamp* dcf)
  return 0;
 }
 
-static void dcfsavetime(void)
+void dcfsavetime(void)
 {
      if ( (
           ( (dcf2.hour == dcf1.hour) && ((dcf2.min - dcf1.min) == 1) )
@@ -151,7 +147,9 @@ static void dcfsavetime(void)
      } else { // if ( (dcf2.min 
       // zeit ist zwar gültig aber nicht konsistent mit der vorigen, 
       // also diese speichern und auf die nächste warten...
-      //debug_printf("Decoded Time: %02u:%02u %u, %02u.%02u.%02u\n",dcf2.hour,dcf2.min,dcf2.wday,dcf2.day,dcf2.month,dcf2.year);
+#ifdef DEBUG_MAIN    
+      debug_printf("Decoded Time: %02u:%02u %u, %02u.%02u.%02u\n",dcf2.hour,dcf2.min,dcf2.wday,dcf2.day,dcf2.month,dcf2.year);
+#endif
       dcfsync = 0;
      }
   
@@ -161,7 +159,7 @@ static void dcfsavetime(void)
 }
 
 
-static void dcfdecode()
+void dcfdecode()
 {
 
      if (dcfsequence) {

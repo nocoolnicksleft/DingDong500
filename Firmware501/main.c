@@ -1,24 +1,36 @@
 
-#include <__cross_studio_io.h>
+#include "main.h"
 
-#include <targets/LPC210x.h>
-
-#define YOFFSET 8
-#include "string.h"
-#include "common.h"
+#include "dcf.h"
+#include "mp3.h"
 #include "vfd.h"
-#include "dcf.c"
-#include "rtc.h"
+#include "keyboard.h"
+#include "ds3231.h"
 
-//#define EXTWAKE (*(volatile unsigned long *)0xE01FC144)
-#define EXTMODE (*(volatile unsigned long *)0xE01FC148)
-#define EXTPOLAR (*(volatile unsigned long *)0xE01FC14C)
+void rtc_write_config(char a, char b) {
+}
 
+char rtc_read_config(char a) {
+ return 0;
+}
+
+void rtc_write_time() {
+}
+
+char rtc_read_time() {
+ return 0;
+}
+
+void rtc_init() {
+}
+
+
+/*********************************************************************/
+/* DEFINITIONS                                                       */
+/*********************************************************************/
 // #define DEBUG_MAIN
-
 #define STARTUP_DELAY 10000
-
-// STATE DEFINITIONS
+// STATE 
 #define TSTATE_DEFAULT 0
 #define TSTATE_MENU01 1
 #define TSTATE_EDITTIME 2
@@ -29,7 +41,9 @@
 
 
 
-
+/*********************************************************************/
+/* PUBLIC VARIABLES                                                  */
+/*********************************************************************/
 
 // CURRENT CONFIGURATION VALUES
 unsigned short int cfg_alarmstate = 0;
@@ -45,7 +59,16 @@ unsigned short int cfg_displaytimeout = 60;
 unsigned short int cfg_showdebug = 0;
 unsigned short int cfg_entrymode = 0;
 
+// STRINGS
+const char Exit[] = "# Exit";
+const char Save[] = "* Save";
+const char TimeFormat[] = "%02u:%02u"; 
+const char FrequencyFormat[] = "%3u.%02u MHz"; 
+const char Days[] = "MoDiMiDoFrSaSo";
 
+/*********************************************************************/
+/* LOCAL VARIABLES                                                   */
+/*********************************************************************/
 
 char spi0_lock = 0;
 char key_pending = 0;
@@ -59,31 +82,9 @@ unsigned short int mp3terminalstate = 0;
 unsigned short int editorposition;
 char timebuffer[11] = "";
 
-
-
-
-// STRINGS
-const char Exit[] = "# Exit";
-const char Save[] = "* Save";
-const char TimeFormat[] = "%02u:%02u"; 
-const char FrequencyFormat[] = "%3u.%02u MHz"; 
-const char Days[] = "MoDiMiDoFrSaSo";
-
-// OTHER CONSTANTS
-const int numbers[5] = {2,9,0,5,9}; //
-
-#include "radio.c"
-
-
 #define LIST_LENGTH 7
 unsigned short int list_offset = 0;
 unsigned short int list_current = 0;
-
-
-static void some_delay(int d)
-{     
-  for(; d; --d);
-}
 
 static int timer0Count;
 
@@ -91,6 +92,20 @@ volatile unsigned short int timeout10msec = 0;
 volatile unsigned short int timer400msec = 40;
 volatile unsigned short int timeout400msec = 0;
 
+/*********************************************************************/
+/* LOCAL CONSTANTS                                                   */
+/*********************************************************************/
+
+const int numbers[5] = {2,9,0,5,9}; //
+
+
+/*********************************************************************/
+/* SOME DELAY                                                        */
+/*********************************************************************/
+static void some_delay(int d)
+{     
+  for(; d; --d);
+}
 
 /*********************************************************************/
 /* SPI LOCK FUNCTIONS                                                */
@@ -115,7 +130,6 @@ void spi_unlock(char id)
 }
 
 
-
 /*********************************************************************/
 /* INTERRUPT RTC (ILR, IRQ)                                          */
 /*********************************************************************/
@@ -124,12 +138,15 @@ static int updateclocknow = 1;
 
 static void rtcISR(void) __attribute__ ((interrupt ("IRQ")));
 
-static void
-rtcISR(void)
+void rtcISR(void)
 {
+
   updateclocknow = 1;
-  ILR = 0xFF;
+  
+  ILR |= 1; // Clear interrupt flag
+
   VICVectAddr = 0;
+  
 }
 
 
@@ -150,6 +167,21 @@ defaultISR(void)
 }
 
 /*********************************************************************/
+/* I2C INTERRUPT                                                     */
+/*********************************************************************/
+static void i2cISR(void) __attribute__ ((interrupt ("IRQ")));
+
+void i2cISR(void)
+{
+
+  
+
+  /* Update VIC priorities */
+  VICVectAddr = 0;
+}
+
+
+/*********************************************************************/
 /* INTERRUPT TIMER0 (FIQ)                                            */
 /*********************************************************************/
 static void timer0ISR(void) __attribute__ ((interrupt ("IRQ")));
@@ -158,8 +190,8 @@ static void
 timer0ISR(void)
 {
 
-  if (++timer0Count % 2) IO1CLR = BIT_19;
-  else IO1SET = BIT_19;
+  if (++timer0Count % 2) IO1CLR = P1_BIT_MONITOR_2;
+  else IO1SET = P1_BIT_MONITOR_2;
 
    if (dcfdeltatimer > 253) dcfdeltatimer = 0;
    else dcfdeltatimer++;
@@ -190,55 +222,85 @@ timer0ISR(void)
 #define KBD_IRQ 15
 #define KBD_SS_DELAY 1200
 
-unsigned char last_key = 0;
+volatile unsigned char last_key = 0;
 
-static void keyboardISR(void) __attribute__ ((interrupt ("IRQ")));
 
-static void keyboardISR(void)
+
+void keyboardISR(void) __attribute__ ((interrupt ("IRQ")));
+
+void keyboardISR(void)   
 {
+  char d;
+  d = S0SPSR;
 
   if (spi_lock(2)) {
-   IOCLR = KBD_SS;
+  
+   IOCLR = PO_BIT_KBD_SEL;
    some_delay(KBD_SS_DELAY);
-   S0SPDR = 0x00;  
-  } else key_pending++;
 
-  EXTINT = BIT_02;
+   S0SPDR = 0xAA;  
+  } else {
+    key_pending++;
+  }
+
+
+  EXTINT = EXTINT_EINT3;
   VICVectAddr = 0;
+  
 }
 
 
 static void keyISR(void) __attribute__ ((interrupt ("IRQ")));
 
-static void keyISR(void)
+static void keyISR(void)  
 {
+  
   if (spi0_lock == 2) {
-   if ((S0SPSR & BIT_07) == BIT_07) {
+   if (S0SPSR & S0SPSR_SPIF) {
     last_key = S0SPDR;
 //    if (last_key == 0) last_key = KEY_1_MAKE;
    }
-   IOSET = KBD_SS;
-   spi_unlock(2);
+   IOSET = PO_BIT_KBD_SEL;
+  spi_unlock(2);
   }
   
-   S0SPINT = BIT_00;
+   S0SPINT = BIT_00; // Clear interrupt
    VICVectAddr = 0;
+
 }
+
 
 int kbd_writebyte(char data)
 {
   if (spi_lock(2)) {
    S0SPCR   = (BIT_05 | BIT_03 );
-   IOCLR = KBD_SS;
+   IOCLR = PO_BIT_KBD_SEL;
    some_delay(KBD_SS_DELAY);
    S0SPDR = data;    
-   while ((S0SPSR & BIT_07) != BIT_07);
+ //  while ((S0SPSR & BIT_07) != BIT_07);
+ some_delay(KBD_SS_DELAY);
    data = S0SPDR;
-   IOSET = KBD_SS;
+   IOSET = PO_BIT_KBD_SEL;
    S0SPCR   = (BIT_05 | BIT_03 | BIT_07);
    spi_unlock(2);
    return S0SPDR;
   }
+
+/*
+  //if (spi_lock(2)) {
+   S0SPCR   = (S0SPCR_MSTR | S0SPCR_CPHA );
+   //IOCLR = KBD_SS;
+   //some_delay(KBD_SS_DELAY);
+   S0SPDR = data;    
+   while (!(S0SPSR & S0SPSR_SPIF));
+   data = S0SPDR;
+   //IOSET = KBD_SS;
+   S0SPCR   = (S0SPCR_MSTR | S0SPCR_CPHA | S0SPCR_SPIE);
+   //spi_unlock(2);
+   return S0SPDR;
+  //}
+*/
+
 }
 
 char kbd_readbyte()
@@ -248,6 +310,7 @@ char kbd_readbyte()
   last_key = 0;
   return data;
 }
+
 
 
 
@@ -305,9 +368,11 @@ void printupdatevfd()
    }
 
   // sonstige interface-updates
-
+/*
+ TODO: Funktion rausfinden und anders lösen
   if (cfg_mp3state) IOSET = BIT_28;
   else IOCLR = BIT_28; 
+*/
 
   if (last_mp3state != cfg_mp3state) {
    if (cfg_mp3state) kbd_writebyte(KEY_ID_LED | KEY_MAKE | 0x1);
@@ -321,7 +386,7 @@ void printinfovfd()
   vfd_docmd4(VFD_CMD_OUTLINE_SET,0,15 + YOFFSET,126,15 + YOFFSET);
   vfd_putc(VFD_CMD_FONT_5X7);
   vfd_setcursor(0,7 + YOFFSET);
-  vfd_printf(SSPSR_TFE);
+  vfd_printf("ALARM");
   printupdatevfd();
 
  //vfd_gotoxy(1,3);
@@ -417,11 +482,11 @@ void setmp3state(unsigned short int newstate)
      kbd_writebyte(KEY_ID_LED | KEY_MAKE | 0x1);
      if (!mp3playing) {
       amp_standby();
-      radiostart();
+      mp3start();
      }
    } else {
      cfg_mp3state = newstate;
-     radioclear();
+     mp3clear();
      kbd_writebyte(KEY_ID_LED | KEY_BREAK | 0x1);
      amp_off();
    }
@@ -433,29 +498,20 @@ void mp3save()
    rtc_write_config(RTC_MP3TITLE2,cfg_mp3title >> 8);
 }
 
-void setradiofrequency(int newf)
-{
-    radioFrequency = newf;
-    radiodisplayfrequency();
-    mp3commandpush(COMMAND_FRQ);
-    rtc_write_config_int(RTC_FREQUENCY,radioFrequency);
-    radioStationID[0] = 0;
-    radiodisplaystationdata();
-}
-
-void setradiovolume(int newv)
-{
-    cfg_mp3volume = newv;
-    mp3commandpush(COMMAND_VOL);
-    rtc_write_config(RTC_MP3VOLUME,cfg_mp3volume);
-    radiodisplayvolume();
-}
 
 void setentrymode(int newmode)
 {
   cfg_entrymode = newmode;
   if (cfg_entrymode)  kbd_writebyte(KEY_ID_LED | KEY_MAKE | 0x3);
   else kbd_writebyte(KEY_ID_LED | KEY_BREAK | 0x3);
+}
+
+void setmp3volume(int newv)
+{
+    cfg_mp3volume = newv;
+    mp3commandpush(MP3_CMD_SET_VOLUME);
+    rtc_write_config(RTC_MP3VOLUME,cfg_mp3volume);
+    mp3displayvolume();
 }
 
 //**********************************************************
@@ -494,28 +550,29 @@ void dokeyboard()
       /********************************************************/
       if (cfg_mp3state) {
 
-      if (key == ROTARY_0_RIGHT) {
-        if (cfg_mp3volume < MP3_VOLUME_MAXIMUM) 
-          setradiovolume(cfg_mp3volume + 1);
-      }
-
-      if (key == ROTARY_0_LEFT) {
-        if (cfg_mp3volume > MP3_VOLUME_MINIMUM)
-          setradiovolume(cfg_mp3volume - 1);
-      }
-       
-
-       if (key == ROTARY_1_RIGHT) {
-        if (radioFrequency < RADIO_FRQ_MAXIMUM) {
-          setradiofrequency(radioFrequency + 50);
+        if (key == ROTARY_0_RIGHT) {
+          if (cfg_mp3volume < MP3_VOLUME_MAXIMUM) 
+            setmp3volume(cfg_mp3volume + 1);
         }
-       }
-       if (key == ROTARY_1_LEFT) {
-        if (radioFrequency > RADIO_FRQ_MINIMUM) {
-          setradiofrequency(radioFrequency - 50);
+  
+        if (key == ROTARY_0_LEFT) {
+          if (cfg_mp3volume > MP3_VOLUME_MINIMUM)
+            setmp3volume(cfg_mp3volume - 1);
         }
-       }
+  
+  
+        if (key == ROTARY_1_RIGHT) {
+          mp3setnextfile();
+          mp3commandpush(MP3_CMD_PLAY);
+        }
+  
+        if (key == ROTARY_1_LEFT) {
+          mp3setprevfile();
+          mp3commandpush(MP3_CMD_PLAY);
+        }
+              
      }
+
       /********************************************************/
       /* Kein Modus aktiv                                     */
       /********************************************************/
@@ -536,7 +593,7 @@ void dokeyboard()
           list_current = 0;
          }
          clearcenter();
-         radioclear();
+         mp3clear();
          vfd_putc(VFD_CMD_FONT_MINI);
          vfd_setcursor(0,64 + YOFFSET);
          vfd_printf("* to select   # to cancel");
@@ -565,11 +622,11 @@ void dokeyboard()
             printtimeeditor();
           
          } else if (key == KEY_3_MAKE) {
-
+/*
             clockterminalstate = TSTATE_EDITFREQUENCY;
             sprintf(timebuffer,FrequencyFormat,radioFrequency / 1000, radioFrequency % 1000);
             printfrequencyeditor();
-          
+  */        
          } 
          else
          if (key == KEY_9_MAKE) {
@@ -603,12 +660,12 @@ void dokeyboard()
 
        if (key == KEY_NUMBER_BREAK) { // escape, nichts ändern, nur raus
         clearcenter();
-        radioclear();
+        mp3clear();
         clockterminalstate = 0;
 
        } else if (key == KEY_ASTERISK_BREAK) { // save, daten speichern und raus
         clearcenter();
-        radioclear();
+        mp3clear();
         cfg_mp3title = list_offset + list_current;
         mp3save();
         clockterminalstate = 0;
@@ -653,8 +710,8 @@ void dokeyboard()
 
         clockterminalstate = TSTATE_DEFAULT;
 	clearcenter();
-        radioclear();
-        if (cfg_mp3state) radiodisplaydata();
+        mp3clear();
+        if (cfg_mp3state) mp3displaycurrentdata();
         updateclocknow = 1;
 
        } else if (key == KEY_ASTERISK_BREAK) { // save, daten speichern und raus
@@ -679,19 +736,19 @@ void dokeyboard()
          updateclocknow = 1;
 
         } else {
-
+/*
          timebuffer[3] = 0;
          timebuffer[6] = 0;
          intbuffer = (atoi(timebuffer)*100) + (atoi(timebuffer + 4) * 1);
          intbuffer *= 10;
          setradiofrequency(intbuffer);
-
+*/
         }
 
         clockterminalstate = TSTATE_DEFAULT;
 	clearcenter();
-        radioclear();
-        if (cfg_mp3state) radiodisplaydata();
+        mp3clear();
+        if (cfg_mp3state) mp3displaycurrentdata();
 
        } else if ( ((key & KEY_ID) == 0x0) && ((key & KEY_MAKE) == KEY_MAKE) ) {  // zahlentasten 
 
@@ -770,49 +827,89 @@ void dokeyboard()
 
 void setup_ports(void)
 {
+
+  PINSEL0 = (
+              (0x1 << PINSEL0_P0_2_BIT)  | // P0.2 = SCL0
+              (0x1 << PINSEL0_P0_3_BIT)  | // P0.3 = SDA0
+              (0x1 << PINSEL0_P0_4_BIT)  | // P0.4 = SCK0
+              (0x1 << PINSEL0_P0_5_BIT)  | // P0.5 = MISO0
+              (0x1 << PINSEL0_P0_6_BIT)  | // P0.6 = MOSI0
+              // (0x1 << PINSEL0_P0_7_BIT)  | // P0.7 = SSEL0
+              (0x1 << PINSEL0_P0_8_BIT)  | // P0.8 = TxD (UART1)
+              (0x1 << PINSEL0_P0_9_BIT)  | // P0.9 = RxD (UART1)
+              (0x2 << PINSEL0_P0_14_BIT)   // P0.14 = EINT1
+            );
+
+  PINSEL1 = (
+              (0x1 << PINSEL1_P0_16_BIT)  | // P0.16 = EINT0
+              (0x2 << PINSEL1_P0_17_BIT)  | // P0.17 = SCK1
+              (0x2 << PINSEL1_P0_18_BIT)  | // P0.18 = MISO1
+              (0x2 << PINSEL1_P0_19_BIT)  | // P0.19 = MOSI1
+              (0x2 << PINSEL1_P0_20_BIT)  | // P0.20 = SSEL1
+              (0x2 << PINSEL1_P0_30_BIT)    // P0.30 = EINT3
+            );  
+
+  IODIR = ( PO_BIT_UMP3_TX |
+            PO_BIT_VFD_SS |
+            PO_BIT_VFD_RES |
+            PO_BIT_KBD_SEL |
+            PO_BIT_KBD_CLR |
+            P0_BIT_LED_RDY |
+            P0_BIT_LED_1 |
+            P0_BIT_LED_2 |
+            P0_BIT_AMP_ON |
+            P0_BIT_AMP_STANDBY
+            );
+
+  IO1DIR = ( P1_BIT_MONITOR_1 |
+             P1_BIT_MONITOR_2 );
+
   IOCLR   = 0xFFFFFFFF;
-  PINSEL0 = ( SEL_P0_3_EINT1 | SEL_P0_8_TXD1 | SEL_P0_9_RXD1 | SEL_P0_SPI0 | SEL_P0_15_EINT2); 
-  PINSEL1 = ( SEL_P016_EINT0 | SEL_P0_SPI1 );
-
-  // IODIR   = ( BIT_02 | BIT_04 | BIT_05 | BIT_06 | BIT_11 | BIT_13 | BIT_22 | BIT_27 | BIT_28 | BIT_29 | BIT_30 );
-  IODIR   = ( BIT_02 | BIT_04 | BIT_11 | BIT_13 | BIT_21 | BIT_22 | BIT_24 | BIT_25 | BIT_27 | BIT_28 | BIT_29 | BIT_30 );
-  IOCLR   = 0xFFFFFFFF;
+  IO1CLR   = 0xFFFFFFFF;
   
-  IOSET = KBD_SS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ;
-  IOCLR = RTC_SEL;
+  IOSET = PO_BIT_KBD_SEL;
+  //IOSET = PO_BIT_VFD_RES;
+  IOSET = PO_BIT_VFD_SS;
 
-  IO1DIR = (IO1DIR | BIT_18 | BIT_19 );
-  IO1DIR &= ~BIT_16;
-  IO1DIR &= ~BIT_17;
-
-  S0SPCCR  = 0x0000000A;
-  S0SPCR   = (BIT_05 | BIT_03 | BIT_07); // Master mode, sync on end, interrupt enabled
+  /************************************************/
+  /* SPI0 KEYBOARD                                */
+  /************************************************/
+  S0SPCR = 0x00;
+  S0SPCCR  = 0x000000FF;
+  S0SPCR   = (S0SPCR_MSTR | S0SPCR_CPHA | S0SPCR_SPIE); // Master mode, sync on end, interrupt enabled
   
-  //S1SPCCR  = 0x00000004; // Clock Divider, 4 min, even only!!
-  S1SPCCR  = 0x000000FF; // Clock Divider, 4 min, even only!!
-  S1SPCR   = (BIT_05); // Master mode
+  /************************************************/
+  /* SSP VFD                                      */ 
+  /************************************************/
+  SSPCPSR  = 0xFF; // Clock Divider, 4 min, even only!!
+  SSPCR0   = (0x3 << 8) | 0x7; // SCR=3, 8 Bit 
+  SSPCR1   = SSPCR1_SSE; // ENABLE SSP
+
 
   /************************************************/
   /*  0  EINT1 (DCF PULSE)                        */
   /*  1  EINT0 (DCF PULSE)                        */
-  /*  4  EINT2 (KEYBOARD)                         */
+  /*  2  EINT2 (I2C)                              */
+  /*  4  EINT3 (KEYBOARD)                         */
   /************************************************/
 
-  //EXTMODE  = (BIT_00 | BIT_01 | BIT_02);
-  EXTMODE  = (BIT_00 | BIT_01 | BIT_02);
-  EXTPOLAR = (BIT_01 | BIT_02);
-  EXTWAKE  = (BIT_02);
-  EXTINT   = (BIT_00 | BIT_01 | BIT_02);
+// TODO turn on EINT2 when needed
+
+  EXTMODE  = (EXTMODE_EXTMODE0 | EXTMODE_EXTMODE1 | EXTMODE_EXTMODE2 | EXTMODE_EXTMODE3);
+  EXTPOLAR = (EXTPOLAR_EXTPOLAR1 | EXTPOLAR_EXTPOLAR2 | EXTPOLAR_EXTPOLAR3);
+  INTWAKE = (INTWAKE_EXTWAKE2);
+  
+  EXTINT = (EXTINT_EINT0 | EXTINT_EINT1 | EXTINT_EINT2 | EXTINT_EINT3); // Reset interrupt flags
 
   /************************************************/
   /*  2  TIMER0                                   */
   /************************************************/
 
-  T0TCR = 0; /* Reset timer 0 */
-  T0PR = 252; // 10MHz: 20MHz: 504 / 14. MHz: 370 /* Set the timer 0 prescale counter */
-  T0MR0 = 989; // 20/14. MHz: 989 /* Set timer 0 match register */
-  T0MCR = 3; /* Generate interrupt and reset counter on match */
-  T0TCR = 1; /* Start timer 0 */
+  T0TCR = 0; // Reset timer 0 
+  T0PR = 252; // 10MHz: 20MHz: 504 / 14. MHz: 370 /* Set the timer 0 prescale counter 
+  T0MR0 = 989; // 20/14. MHz: 989 / Set timer 0 match register 
+  T0MCR = 3; // Generate interrupt and reset counter on match 
+  T0TCR = 1; // Start timer 0 
 
   /************************************************/
   /*  6  RTC (SECOND CHANGE)                      */
@@ -836,12 +933,18 @@ void setup_ports(void)
   //PREINT = int (25000000 / 32768) - 1 = 761
   //PREFRAC = 25000000 - ((761 +1) x 32768) = 30,784
 
+  CCR = CCR_CTCRST | CCR_CLKSRC; // RTC Disable/Reset, Clocksource=32kHz Crystal
+  ILR = ILR_RTCCIF | ILR_RTCALF; // Clear interrupts
+  CIIR = CIIR_IMSEC; // Interrupt every 1 SEC
+  CCR = CCR_CLKEN | CCR_CLKSRC; // RTC Enable, Clocksource=32kHz Crystal
+/*
+  ILR |= 0x3; // Clear interrupts
   CCR = 0x2;
   PREINT = 761;
   PREFRAC = 30784;
   CIIR = 0x1;
   CCR = 0x1;
-
+*/
   /************************************************/
   /*  5  UART1 (MP3 BOARD)                        */
   /************************************************/
@@ -869,15 +972,17 @@ void setup_ports(void)
   //  Divisor: 25000000 / (16 * 19200) = ^   = 0x
   //  Divisor: 25000000 / (16 * 38400) = 40,690104166666666666666666666667 ^  41 = 0x28
   //  Divisor: 25000000 / (16 * 115200) = 13,563368055555555555555555555556  ^  14 = 0x0E
-
+/*
   U1LCR = 0x00000083; // line control 
   U1DLM = 0x0;  // divisor msb
   U1DLL = 0x28; // divisor lsb
   U1LCR = 0x00000003; // line control
   U1FCR = 0x41; // FIFO control
   U1IER = 0x1; // interupt enable (RBR=0x1, THRE=0x2)
-
+*/
 }
+
+#define IRQslot_en 0x20
 
 void setup_interrupts(void)
 {
@@ -886,64 +991,95 @@ void setup_interrupts(void)
   /************************************************/
   VICDefVectAddr = (unsigned int)defaultISR;
 
+  // Clear Interrupt selections
+  VICIntSelect = 0x00000000;
+
+  // Clear all interrupts
+  VICIntEnClr = 0xFFFFFFFF;
+
   /************************************************/
   /*  0  EINT1 (DCF PULSE)                        */
   /************************************************/
-  VICIntSelect &= ~0x00008000;
-  VICIntEnable = 0x00008000; /* Enable EINT1 interrupt */
-  VICVectCntl0 =  0x0000002F; /* Use slot 3 for EINT1 interrupt */
-  VICVectAddr0 = (unsigned int)dcfupISR; /* Set the address of ISR for slot 1 */
+  
+  VICIntSelect &= ~VICIntSelect_EINT1;     // Interrupt is IRQ 
+  VICIntEnable = VICIntEnable_EINT1;       // Enable interrupt 
+  VICVectCntl0 =  IRQslot_en | VICIntEnable_EINT1_BIT; // Enable vector for slot 0, select EINT1
+  VICVectAddr0 = (unsigned int)dcfupISR;   // Set vector address 
 
   /************************************************/
   /*  1  EINT0 (DCF PULSE)                        */
   /************************************************/
-  VICIntSelect &= ~0x00004000; // IRQ interrupt 
-  VICIntEnable = 0x00004000; /* Enable EINT0 interrupt */
-  VICVectCntl1 = 0x0000002E; /* Use slot 2 for EINT0 interrupt */
-  VICVectAddr1 = (unsigned int)dcfdownISR; /* Set the address of ISR for slot 1 */
+  
+  VICIntSelect &= ~VICIntSelect_EINT0;     // IRQ interrupt 
+  VICIntEnable = VICIntEnable_EINT0;       // Enable interrupt 
+  VICVectCntl1 = IRQslot_en | VICIntEnable_EINT0_BIT; // Enable vector for slot 01 select EINT0 
+  VICVectAddr1 = (unsigned int)dcfdownISR; // Set vector address 
+  
 
   /************************************************/
   /*  2  TIMER0                                   */
   /************************************************/
-  VICIntSelect &= ~0x10; /* Timer 0 interrupt is IRQ interrupt */
-  VICIntEnable = 0x10; /* Enable timer 0 interrupt */
-  VICVectCntl2 = 0x24; /* Use slot 0 for timer 0 interrupt */
-  VICVectAddr2 = (unsigned int)timer0ISR; /* Set the address of ISR for slot 0 */
+  
+  VICIntSelect &= ~VICIntSelect_TIMER0;   // IRQ interrupt  
+  VICIntEnable = VICIntEnable_TIMER0;     // Enable interrupt   
+  VICVectCntl2 = IRQslot_en | VICIntEnable_TIMER0_BIT; // Enable vector for slot 2, select TIMER0
+  VICVectAddr2 = (unsigned int)timer0ISR; // Set vector address 
+  
 
   /************************************************/
-  /*  3  SPI0 (KEYBOARD/RTC)                      */
+  /*  3  SPI0 KEYBOARD                            */
   /************************************************/
-  VICIntSelect &= ~BIT_10;
-  VICIntEnable = BIT_10; /* Enable SPI0 interrupt */
-  VICVectCntl3 =  0x20 | 0xA; /* Use slot 5 for SPI0 interrupt */
-  VICVectAddr3 = (unsigned int)keyISR; /* Set the address of ISR for slot  */
+  
+  VICIntSelect &= ~VICIntSelect_SPI0;    // IRQ interrupt 
+  VICIntEnable = VICIntEnable_SPI0;      // Enable interrupt   
+  VICVectCntl3 = IRQslot_en | VICIntEnable_SPI0_BIT; // Enable vector for slot 3, select SPI0
+  VICVectAddr3 = (unsigned int)keyISR;   // Set vector address 
+  
 
   /************************************************/
-  /* 4  EINT2 (KEYBOARD)                          */
+  /* 4  EINT3 (KEYBOARD)                          */
   /************************************************/
-  VICIntSelect &= ~0x00010000;
-  VICIntEnable = 0x00010000; /* Enable EINT2 interrupt */
-  VICVectCntl4 = 0x20 | 0x10; /* Use slot 2 for EINT2 interrupt */
-  VICVectAddr4 = (unsigned int)keyboardISR; /* Set the address of ISR for slot  */
+  
+  VICIntSelect &= ~VICIntSelect_EINT3;   // IRQ interrupt 
+  VICIntEnable = VICIntEnable_EINT3;     // Enable interrupt 
+  VICVectCntl4 = IRQslot_en | VICIntEnable_EINT3_BIT; // Enable vector for slot 4, select EINT2
+  VICVectAddr4 = (unsigned int)keyboardISR; // Set vector address
+  
 
   /************************************************/
   /*  5  UART1 (MP3 BOARD)                        */
   /************************************************/
-  VICIntSelect &= ~(1 << 7); /* interrupt is an IRQ interrupt */
-  VICIntEnable = 0x00000080; /* Enable UART1 interrupt */
-  VICVectCntl5 = 0x20 | 0x00000007; /* Use slot 3 for UART1 interrupt */
-  VICVectAddr5 = (unsigned int)serialISR; /* Set the address of ISR for slot 3 */
+  
+  VICIntSelect &= ~VICIntSelect_UART1;  // IRQ interrupt 
+  VICIntEnable = VICIntEnable_UART1;    // Enable interrupt
+  VICVectCntl5 = IRQslot_en | VICIntEnable_UART1_BIT;  // Enable vector for slot 5, select UART1
+  VICVectAddr5 = (unsigned int)serialISR; // Set vector address
+  
 
   /************************************************/
   /*  6  RTC (SECOND CHANGE)                      */
   /************************************************/
-  VICIntSelect &= ~0x00002000; /* RTC interrupt is an IRQ interrupt */
-  VICIntEnable = 0x00002000; /* Enable UART1 interrupt */
-  VICVectCntl6 = 0x20 | 0x0000000D; /* Use slot 3 for UART1 interrupt */
-  VICVectAddr6 = (unsigned int)rtcISR; /* Set the address of ISR for slot 3 */
+  
+  VICIntSelect &= ~VICIntSelect_RTC;    // IRQ interrupt 
+  VICIntEnable = VICIntEnable_RTC; // Enable interrupt
+  VICVectCntl6 = IRQslot_en | VICIntEnable_RTC_BIT; // Enable vector for slot 6, select RTC
+  VICVectAddr6 = (unsigned int)rtcISR; // Set vector address
+  
+
+  /************************************************/
+  /*  7 I2C                                       */
+  /************************************************/
+  /*
+  VICIntSelect &= ~VICIntSelect_I2C0;    // IRQ interrupt 
+  VICIntEnable = VICIntEnable_I2C0; // Enable interrupt
+  VICVectCntl7 = IRQslot_en | VICIntEnable_I2C0_BIT; // Enable vector for slot 7, select I2C
+  VICVectAddr7 = (unsigned int)i2cISR; // Set vector address
+  */
 
  // __ARMLIB_enableFIQ();
-  __ARMLIB_enableIRQ();
+ // ILR |= 1;
+
+  libarm_enable_irq();
 
 }
 
@@ -953,17 +1089,48 @@ void readconfig()
 #ifdef DEBUG_MAIN
   debug_printf("-%X-",IO1PIN);
 #endif
-  if ((IO1PIN & BIT_16) ==  BIT_16) option1 = 1;
-  if ((IO1PIN & BIT_17) ==  BIT_17) option2 = 1;
+  if (IO1PIN & P1_BIT_CONFIG_1) option1 = 1;
+  if (IO1PIN & P1_BIT_CONFIG_2) option2 = 1;
 }
 
-int main(void)
-{
+  static int counter = 0;
+
+int secondticks = 0;
+void tick( void) {
+  static int status = 0; 
+//  if (counter > secondticks) {
+//    counter = 0;
+    IOSET = (P0_BIT_LED_RDY | P0_BIT_LED_1 | P0_BIT_LED_2);
+    if (status == 0) {
+      status = 1;
+      IOCLR = P0_BIT_LED_RDY;  
+    } else if (status == 1) {
+      status = 2;
+      IOCLR = P0_BIT_LED_1;  
+    } else {
+      status = 0;
+      IOCLR = P0_BIT_LED_2;  
+    }    
+//  }
+//  counter++;
+}
+
+int main( void) {
+/*
+  setupPorts();
+  secondticks = ctl_get_ticks_per_second() >> 1;
+  libarm_set_irq(1);
+  ctl_start_timer(tick);
+*/
+
   char c;
 
   some_delay(STARTUP_DELAY);
 
   setup_ports();
+
+
+
   amp_off();
   readconfig();
 
@@ -984,7 +1151,7 @@ int main(void)
    cfg_mp3title  = rtc_read_config(RTC_MP3TITLE1);
    cfg_mp3title  |= ( rtc_read_config(RTC_MP3TITLE2) << 8);
    cfg_showdebug = rtc_read_config(RTC_SHOWDEBUG);
-   radioFrequency = rtc_read_config_int(RTC_FREQUENCY);
+   //radioFrequency = rtc_read_config_int(RTC_FREQUENCY);
 #ifdef DEBUG_MAIN
    debug_printf("read config\n");   
 #endif
@@ -999,7 +1166,7 @@ int main(void)
    rtc_write_config(RTC_MP3TITLE1,cfg_mp3title);
    rtc_write_config(RTC_MP3TITLE2,cfg_mp3title >> 8);
    rtc_write_config(RTC_SHOWDEBUG,cfg_showdebug);
-   rtc_write_config_int(RTC_FREQUENCY,radioFrequency);
+   //rtc_write_config_int(RTC_FREQUENCY,radioFrequency);
    rtc_write_config(RTC_MAGICNUMBER,218);
 #ifdef DEBUG_MAIN
    debug_printf("fresh config\n");   
@@ -1007,7 +1174,7 @@ int main(void)
   }
 
   setup_interrupts();
-    
+
 
   // initialize hardware interface
   setalarmstate(cfg_alarmstate);
@@ -1057,7 +1224,9 @@ int main(void)
       }
 */
       // wenn editor aktiv: cursor blinken
-      if ((clockterminalstate == TSTATE_EDITTIME) || (clockterminalstate == TSTATE_EDITALARM)  || (clockterminalstate == TSTATE_EDITFREQUENCY)) printtimecursor();
+      if ((clockterminalstate == TSTATE_EDITTIME) || (clockterminalstate == TSTATE_EDITALARM)  || (clockterminalstate == TSTATE_EDITFREQUENCY)) {
+        printtimecursor();
+      }
     }
 
     dokeyboard();
@@ -1066,7 +1235,8 @@ int main(void)
      timeout10msec = 0;
 
      if (!clockterminalstate) {
-      printupdatevfd();
+      //printupdatevfd();
+      printinfovfd();
      }
 /*
      if (mp3status) {
@@ -1086,6 +1256,8 @@ int main(void)
     }
 
     if (updateclocknow) {
+     tick();
+  
      updateclocknow  = 0; 
 
      if (clockterminalstate != TSTATE_EDITTIME) {
@@ -1128,5 +1300,11 @@ int main(void)
   }
 
 
+  
 }
+
+
+
+
+
 

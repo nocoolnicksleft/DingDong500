@@ -4,7 +4,24 @@
   <Watches active="0" />
  </Autos>
  <Bookmarks/>
- <Breakpoints/>
+ <Breakpoints>
+  <BreakpointListItem actiontype="0" chainFrom="" line="112" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Breakpoints" breakdatatype="0" value="0" name="unnamed" counter="0" state="4" mask="0" comparison="0" expression="" filename="J:\Publizieren\Hardware\DingDong500\Firmware501\main.cpp" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="D_Abort" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="FIQ" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="IRQ" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="P_Abort" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="Reset" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="SWI" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="ARM Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="Undef" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="BusFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="ExceptionEntryReturnFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="HardFault" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="MemManage" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="3" mask="0" comparison="0" expression="Reset" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_CheckingError" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_Coprocessor" filename="" />
+  <BreakpointListItem actiontype="0" chainFrom="" line="-1" defaultBreakType="true" length="0" triggertype="0" useHWbreakpoint="false" group="Cortex-M3 Exceptions" breakdatatype="5" value="0" name="unnamed" counter="0" state="2" mask="0" comparison="0" expression="UsageFault_StateError" filename="" />
+ </Breakpoints>
  <ExecutionCountWindow/>
  <Memory1>
   <MemoryWindow autoEvaluate="1" addressText="IO0PIN" numColumns="8" sizeText="4" dataSize="2" radix="2" addressSpace="" />
@@ -20,12 +37,18 @@
  </Memory4>
  <MemoryUsageWindow>
   <ProjectSessionItem path="Firmware501" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501;Source Files" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501;System Files" name="unnamed" />
  </MemoryUsageWindow>
  <Project>
   <ProjectSessionItem path="Firmware501" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501;Source Files" name="unnamed" />
+  <ProjectSessionItem path="Firmware501;Firmware501;System Files" name="unnamed" />
  </Project>
  <Register1>
-  <RegisterWindow openNodes="CPU - Current Mode;CPU - Current Mode/cpsr" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
+  <RegisterWindow openNodes="CPU - Current Mode;CPU - Current Mode/cpsr;CPU - Current Mode/cpsr/M" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
  </Register1>
  <Register2>
   <RegisterWindow openNodes="" binaryNodes="" unsignedNodes="" visibleGroups="CPU - Current Mode" decimalNodes="" octalNodes="" asciiNodes="" />
@@ -52,7 +75,26 @@
  <Watch4>
   <Watches active="0" />
  </Watch4>
- <Files/>
+ <Files>
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="52" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware\main.c" y="905" path="J:\Publizieren\Hardware\DingDong500\Firmware\main.c" left="0" selected="0" name="unnamed" top="886" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\mp3.c" y="116" path="J:\Publizieren\Hardware\DingDong500\Firmware501\mp3.c" left="0" selected="0" name="unnamed" top="102" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="21" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\main.h" y="80" path="J:\Publizieren\Hardware\DingDong500\Firmware501\main.h" left="0" selected="0" name="unnamed" top="69" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\rtc.c" y="96" path="J:\Publizieren\Hardware\DingDong500\Firmware501\rtc.c" left="0" selected="0" name="unnamed" top="71" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\dcf.c" y="54" path="J:\Publizieren\Hardware\DingDong500\Firmware501\dcf.c" left="0" selected="0" name="unnamed" top="48" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="6" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\vfd.c" y="30" path="J:\Publizieren\Hardware\DingDong500\Firmware501\vfd.c" left="0" selected="1" name="unnamed" top="12" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="26" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\dcf.h" y="34" path="J:\Publizieren\Hardware\DingDong500\Firmware501\dcf.h" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="7" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\mp3.h" y="63" path="J:\Publizieren\Hardware\DingDong500\Firmware501\mp3.h" left="0" selected="0" name="unnamed" top="51" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="11" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\vfd.h" y="10" path="J:\Publizieren\Hardware\DingDong500\Firmware501\vfd.h" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\keyboard.h" y="65" path="J:\Publizieren\Hardware\DingDong500\Firmware501\keyboard.h" left="0" selected="0" name="unnamed" top="15" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\ds3231.cpp" y="25" path="J:\Publizieren\Hardware\DingDong500\Firmware501\ds3231.cpp" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="55" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\i2c_slave.h" y="8" path="J:\Publizieren\Hardware\DingDong500\Firmware501\i2c_slave.h" left="0" selected="0" name="unnamed" top="36" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\ds3231.h" y="19" path="J:\Publizieren\Hardware\DingDong500\Firmware501\ds3231.h" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="2" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\i2c_slave.cpp" y="12" path="J:\Publizieren\Hardware\DingDong500\Firmware501\i2c_slave.cpp" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="19" debugPath="c:\crossworks for arm 1.7\include\targets\LPC2141.h" y="1183" path="c:\crossworks for arm 1.7\include\targets\LPC2141.h" left="0" selected="0" name="unnamed" top="1165" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\main.c" y="40" path="J:\Publizieren\Hardware\DingDong500\Firmware501\main.c" left="0" selected="0" name="unnamed" top="37" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="c:\crossworks for arm 1.7\include\targets\LPC210x.h" y="2023" path="c:\crossworks for arm 1.7\include\targets\LPC210x.h" left="0" selected="0" name="unnamed" top="2023" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" codecName="Latin1" x="0" debugPath="J:\Publizieren\Hardware\DingDong500\Firmware501\spi.c" y="86" path="J:\Publizieren\Hardware\DingDong500\Firmware501\spi.c" left="0" selected="0" name="unnamed" top="69" />
+ </Files>
  <ARMCrossStudioWindow activeProject="Firmware501" autoConnectTarget="/USB CrossConnect for ARM-RTCK" debugSearchFileMap="..\libmad-0.15.1b\minimad.c
 
 \cygdrive\c\Keil\ARM\GNU\Boards\Keil\MCB2130\libmad-0.15.1b\bit.c
@@ -86,5 +128,5 @@ C:\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philip
 \cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\libmad-0.15.1b\timer.c
 \timer.c
 \cygdrive\c\Program Files\Rowley Associates Limited\CrossWorks for ARM 1.5\samples\Philips_LPC210X\Keil_MCB2140\MP3Player\ARM Flash Debug\Startup.s
-\Startup.s" fileDialogInitialDirectory="C:\LokaleDaten\ARMprojects\NixieClock_Armed_01" fileDialogDefaultFilter="*" autoConnectCapabilities="1407" debugSearchPath="" buildConfiguration="ARM Flash Debug" />
+\Startup.s" fileDialogInitialDirectory="J:\Publizieren\Hardware\DingDong500\Firmware501\ARM Flash Debug" fileDialogDefaultFilter="*.cpp;*.cxx;*.cc;*.c;*.h;*.hpp;*.hxx" autoConnectCapabilities="1407" debugSearchPath="" buildConfiguration="ARM Flash Debug" />
 </session>

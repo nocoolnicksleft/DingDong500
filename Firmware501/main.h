@@ -1,11 +1,28 @@
 
 #include <targets/LPC210x.h>
+#include <targets/LPC2141.h>
+
+#include <cross_studio_io.h>
+
 #include <libarm.h>
 #include <ctl_api.h>
 
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+
+typedef signed char int8;
+typedef unsigned char uint8;
+typedef unsigned char u8;
+
+typedef short signed int int16;
+typedef short unsigned int uint16;
+typedef short unsigned int u16;
+
+typedef signed int int32;
+typedef unsigned int uint32;
+typedef unsigned int u32;
 
 
 #define BIT_00 0x1
@@ -50,49 +67,64 @@
 		| 0##y >> 12 &  64 \
 		| 0##y >> 14 & 128 )
 
-/*
-int bit_test(int data, int bit)
-{
-  return (data & (1 << bit) == (1 << bit));
-}
-*/
 
-#define SEL_P0_3_EINT1 0x000000C0
-#define SEL_P0_7_EINT2 0x0000C000
-#define SEL_P0_15_EINT2 0x80000000
-#define SEL_P0_9_RXD1  0x00040000
-#define SEL_P0_8_TXD1  0x00010000
-#define SEL_P016_EINT0 0x00000001
-#define SEL_P3_23_XCLK 0x00002000
-#define SEL_P0_2_EINT0 0x0000000C
-#define SEL_P0_SPI1    0x000002A8  // Enables SCK1, MISO1, MOSI1, SSEL1
-#define SEL_P0_SPI1_N  (BIT_03 | BIT_05 | BIT_07 | BIT_09)   
-#define SEL_P0_SPI0    0x00005500 // Enables SCK0, MISO0, MOSI0, SSEL0
-#define SEL_P0_SPI0_N  (BIT_08 | BIT_10 | BIT_12 | BIT_14)    
+/*********************************************************************/
+/* PORT DEFINITIONS                                                  */
+/*********************************************************************/
+
+#define PO_BIT_SCL (0x1 << 2)
+#define PO_BIT_SDA (0x1 << 3)
+
+#define PO_BIT_UMP3_RX (0x1 << 9)
+#define PO_BIT_UMP3_TX (0x1 << 8)
+
+#define PO_BIT_VFD_MB (0x1 << 28)
+#define PO_BIT_VFD_SS (0x1 << 29)
+#define PO_BIT_VFD_RES (0x1 << 22)
+#define PO_BIT_VFD_SOUT (0x1 << 18)
+#define PO_BIT_VFD_SIN (0x1 << 19)
+#define PO_BIT_VFD_SCK (0x1 << 17)
+
+#define PO_BIT_KBD_SCK (0x1 << 4)
+#define PO_BIT_KBD_SIN (0x1 << 6)
+#define PO_BIT_KBD_SOUT (0x1 << 5)
+#define PO_BIT_KBD_IRQ (0x1 << 30)
+#define PO_BIT_KBD_SEL (0x1 << 7)
+#define PO_BIT_KBD_CLR (0x1 << 10)
+
+#define PO_BIT_DCF_SIG_1 (0x1 << 14)
+#define PO_BIT_DCF_SIG_2 (0x1 << 16)
+
+#define P0_BIT_LED_RDY (0x1 << 31)
+#define P0_BIT_LED_1 (0x1 << 12)
+#define P0_BIT_LED_2 (0x1 << 13)
+
+#define P0_BIT_AMP_ON (0x1 << 21)
+#define P0_BIT_AMP_STANDBY (0x1 << 25)
+
+#define P1_BIT_CONFIG_1 (0x1 << 16)
+#define P1_BIT_CONFIG_2 (0x1 << 17)
+
+#define P1_BIT_MONITOR_1 (0x1 << 18)
+#define P1_BIT_MONITOR_2 (0x1 << 19)
 
 
-#define PINSEL0 (*(volatile unsigned long *)0xE002C000)
-#define PINSEL1 (*(volatile unsigned long *)0xE002C004)
-#define PINSEL2 (*(volatile unsigned long *)0xE002C014)
 
-#define S1SPCCR (*(volatile unsigned long *)0xE003000C)
-#define S1SPCR (*(volatile unsigned long *)0xE0030000)
-#define S1SPDR (*(volatile unsigned long *)0xE0030008)
-#define S1SPSR (*(volatile unsigned long *)0xE0030004)
-#define S1SPINT (*(volatile unsigned long *)0xE003001C)
+/*********************************************************************/
+/* RTC STATUS                                                        */
+/*********************************************************************/
 
-#define S0SPCCR (*(volatile unsigned long *)0xE002000C)
-#define S0SPCR (*(volatile unsigned long *)0xE0020000)
-#define S0SPDR (*(volatile unsigned long *)0xE0020008)
-#define S0SPSR (*(volatile unsigned long *)0xE0020004)
-#define S0SPINT (*(volatile unsigned long *)0xE002001C)
-
-#define IO1PIN (*(volatile unsigned long *)0xE0028010)
-#define IO1SET (*(volatile unsigned long *)0xE0028014)
-#define IO1DIR (*(volatile unsigned long *)0xE0028018)
-#define IO1CLR (*(volatile unsigned long *)0xE002801C)
-
-
+#define RTC_ALARMSTATE 0
+#define RTC_ALARMMODE 1
+#define RTC_ALARMMINUTE 2
+#define RTC_ALARMHOUR 3
+#define RTC_ALARMDAYS 4
+#define RTC_MP3TITLE1 5
+#define RTC_MP3TITLE2 6
+#define RTC_MP3VOLUME 7
+#define RTC_SHOWDEBUG 8
+#define RTC_MAGICNUMBER 9
+#define RTC_FREQUENCY 10
 
 // CURRENT CONFIGURATION VALUES
 extern unsigned short int cfg_alarmstate;

@@ -5,44 +5,14 @@
 #include "rtc.h"
 
 
-/*********************************************************************/
-/* CONFIGURATION                                                     */
-/*********************************************************************/
-
-#define MP3_COLUMN_LENGTH 21
-#define MP3_BUFFERSIZE 60
-#define MP3_QUEUE_LENGTH 30
-
-#define MP3_STATUS_READY 0
-#define MP3_CMD_QUERY_STATUS 1
-#define MP3_CMD_SET_VOLUME 2
-#define MP3_CMD_PLAY 3
-#define MP3_CMD_STOP 4
-#define MP3_CMD_OPEN_TITLEFILE 9
-#define MP3_CMD_OPEN_COUNTERFILE 12
-#define MP3_CMD_QUERY_COUNTERS 13
-#define MP3_CMD_CLOSE_TITLEFILE 14
-#define MP3_CMD_CLOSE_COUNTERFILE 15
-#define MP3_CMD_SET_BASS_ENHANCE 17
-#define MP3_CMD_SET_SERIAL_SPEED 18
-#define MP3_CMD_LOAD_MACRO 19
-#define MP3_CMD_QUERY_ALL 20
-#define MP3_CMD_DEVICE_INFO 21
-
-#define MP3_DEFAULT_TIMEOUT 20
-
-#define MP3_VOLUME_MINIMUM 120
-#define MP3_VOLUME_MAXIMUM 50
-#define MP3_VOLUME_DEFAULT 90
-#define MP3_BUFFER_SIZE 100
 
 /*********************************************************************/
 /* DATA                                                              */
 /*********************************************************************/
 
-static unsigned short int mp3message = 0;
-static char mp3buffer[MP3_BUFFERSIZE];
-static unsigned short int mp3bufferptr = 0;
+unsigned short int mp3message = 0;
+char mp3buffer[MP3_BUFFERSIZE];
+unsigned short int mp3bufferptr = 0;
 
 unsigned short int mp3status = 0;
 unsigned short int mp3completed = 0;
@@ -55,12 +25,6 @@ unsigned short int mp3fetch = 0;
 unsigned short int mp3currenttime = 0;
 unsigned short int mp3cardmissing = 0;
 
-
-struct mp3titledata {
- char artist[MP3_COLUMN_LENGTH + 1];
- char title[MP3_COLUMN_LENGTH + 1];
- unsigned short int length;
-};
 
 struct mp3titledata mp3list[MP3_BUFFER_SIZE];
 
@@ -95,9 +59,9 @@ void amp_power()
 /*********************************************************************/
 /* INTERRUPT UART1 (IRQ)                                             */
 /*********************************************************************/
-static void serialISR(void) __attribute__ ((interrupt ("IRQ")));
 
-static void serialISR(void)
+
+void serialISR(void)
 {
   char c;
   int u;
@@ -229,6 +193,7 @@ void mp3sendcommand()
   mp3timeout = MP3_DEFAULT_TIMEOUT;
 }
 
+
 void mp3execute()
 {
  if (get_queue_length() && (!mp3status)  && (!mp3message)) {
@@ -268,6 +233,7 @@ void mp3displaytime()
   vfd_printf(TimeFormat,(unsigned short int)(mp3currenttime/60),(unsigned short int)(mp3currenttime%60));
 }
 
+
 void mp3displaydata(struct mp3titledata *data)
 {
          vfd_putc(VFD_CMD_FONT_5X7);
@@ -286,6 +252,21 @@ void mp3displaydata(struct mp3titledata *data)
          //vfd_docmd4(VFD_CMD_OUTLINE_SET,20,59,106,63);
          //vfd_docmd4(VFD_CMD_AREA_CLEAR,21,60,105,62);
 }
+
+void mp3displaycurrentdata() {
+  //mp3displaydata(mp3list[cfg_mp3title]);
+}
+
+
+void mp3displayvolume()
+{
+     //vfd_putc(VFD_CMD_FONT_MINI);
+     //vfd_setcursor(0,54 + YOFFSET);
+     //vfd_printf("%02u",radioVolume);
+     vfd_make_progressbar(0,51 + YOFFSET,124,55 + YOFFSET,20,0);
+     vfd_update_progressbar(cfg_mp3volume);
+}
+
 
 void mp3start()
 {

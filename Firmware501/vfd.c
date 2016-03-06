@@ -9,8 +9,8 @@
 #define VFD_SOUT 18
 #define VFD_SIN 19
 
-#define VFD_MB 12
-#define VFD_SS 13
+#define VFD_MB 28
+#define VFD_SS 29
 #define VFD_RES 22
 
 #define VFD_PRINTBUFFERSIZE 120
@@ -33,17 +33,20 @@ static void vfd_delay(int d)
 }
 
 
-int vfd_putc(char data)
+char vfd_putc(char data)
 {
-  unsigned short int i;
-  while ( ((IOPIN & (1 << VFD_MB)) ) ==  (1 << VFD_MB));
-  IOCLR = 1 << VFD_SS;
-  vfd_delay(1500);
-  S1SPDR = data;
-  while ((S1SPSR & BIT_07) != BIT_07) { } 
-  data = S0SPDR;
-  S1SPSR = 0x0;
-  IOSET = 1 << VFD_SS;
+
+  while (FIO0PIN & PO_BIT_VFD_MB); // Check if VFD is not busy 
+  
+  IOCLR = PO_BIT_VFD_SS;
+
+  SSPDR = data; // Write byte
+  data = SSPDR; // Dummy read to clear status
+
+  while (!(SSPSR & SSPSR_TFE)); // Check Transmit FIFO Empty
+
+  IOSET = PO_BIT_VFD_SS;
+
   return data;
 }
 
@@ -112,11 +115,11 @@ unsigned int vfd_readbyte()
 {
   unsigned short int i;
   unsigned  short int data = 0;
-  while ( ((IOPIN & (1 << VFD_MB)) ) ==  (1 << VFD_MB));
-  IOCLR = 1 << VFD_SS;
-  while ((S1SPSR & BIT_07) != BIT_07) { } 
-  data = S1SPDR;
-  IOSET = 1 << VFD_SS;
+  while (IOPIN & PO_BIT_VFD_MB);
+  IOCLR = PO_BIT_VFD_SS;
+  while (SSPSR & SSPSR_BSY);
+  data = SSPDR;
+  IOSET = PO_BIT_VFD_SS;
   return data;
 }
 
@@ -160,8 +163,8 @@ void vfd_docmd4(char command, char x1, char y1, char x2, char y2)
 
 void vfd_init()
 {
- IOSET = 1 << VFD_SS;
- IOSET = 1 << VFD_RES;
+ IOSET = PO_BIT_VFD_SS;
+ IOSET = PO_BIT_VFD_RES;
  vfd_putc(0x60); // use BCD mode
  vfd_putc(0x31); // 1
  vfd_putc(0x42); // B

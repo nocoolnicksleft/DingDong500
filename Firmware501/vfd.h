@@ -4,7 +4,11 @@
 extern int vfd_modebits;
 extern char vfd_turm[8];
 
-extern int  vfd_putc(char data);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern char  vfd_putc(char data);
 extern void vfd_setgraphics_macro(char id, char length, char data[]);
 extern void vfd_setbrightness(char value);
 extern void vfd_setcursor(char x, char y);
@@ -15,6 +19,15 @@ extern int  vfd_printf(const char *format, ...);
 extern void vfd_keyboardscan(void);
 
 static void vfd_delay(int d);
+
+extern void vfd_off();
+extern void vfd_on();
+
+#ifdef __cplusplus
+}
+#endif
+
+
 
 #define VFD_CMD_BACKSPACE 0x08
 #define VFD_CMD_HORIZONTAL_TAB 0x09
@@ -38,4 +51,6 @@ static void vfd_delay(int d);
 #define VFD_CMD_FONT_MINI 0x1C
 #define VFD_CMD_FONT_5X7 0x1D
 #define VFD_CMD_FONT_10X14 0x1E
+
+#define YOFFSET 8
 
